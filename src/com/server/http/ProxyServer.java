@@ -6,7 +6,7 @@ import java.io.*;
 public class ProxyServer {
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = null ;
-		boolean listening = true;
+		boolean listening = true; 
 
 		int port = 10000; // default
 
