@@ -1,27 +1,22 @@
 package com.server.http;
 
-import java.net.*;
-import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class ProxyServer {
-	public static void main(String[] args) throws IOException {
-		ServerSocket serverSocket = null ;
-		boolean listening = true; 
+public final class ProxyServer {
 
-		int port = 10000; // default
+	public static void main(String argv[]) throws Exception {
+		int port = 80;
+		ServerSocket WebSocket = new ServerSocket(port);
 
-		try {
-			serverSocket = new ServerSocket(port);
-			System.out.println("Started on: " + port);
-		} catch (IOException e) {
-			System.err.println("Could not listen on port: " + "System failure");
-			e.printStackTrace();
-			System.exit(-1);
+		while (true) {
+			// Listen for a TCP connection request.
+			Socket connectionSocket = WebSocket.accept();
+			// Construct object to process HTTP request message
+			HttpRequest request = new HttpRequest(connectionSocket);
+
+			Thread thread = new Thread(request);
+			thread.start(); // start thread
 		}
-
-		while (listening) {
-			new ProxyThread(serverSocket.accept()).start();
-		}
-		serverSocket.close();
 	}
 }
